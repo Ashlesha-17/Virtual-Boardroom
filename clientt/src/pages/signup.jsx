@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -28,13 +29,18 @@ const handleSignup = async (e) => {
 
     const data = await res.json();
 
-    if (res.ok) {
-      localStorage.setItem("username", name);
-      localStorage.setItem("email", email);
-      localStorage.setItem("contact", contact);
-      alert(data.message);
-      navigate("/home");
-    } else {
+if (res.ok) {
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      name,
+      email,
+      contact,
+      role: "user"
+    })
+  );
+  navigate("/home");
+} else {
       alert(data.message);
     }
   } catch (err) {
