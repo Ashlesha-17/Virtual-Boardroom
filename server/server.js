@@ -51,10 +51,16 @@ mongoose
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: [
+      "https://virtual-boardroom.vercel.app",
+      "https://virtual-boardroom-ox14.vercel.app",
+      "https://virtual-boardroom-ox14-9ildlvcz6-ashlesha-mandhares-projects.vercel.app"
+    ],
+    methods: ["GET", "POST"],
     credentials: true
   }
 });
+
 
 // Make io accessible in routes
 app.set("io", io);
