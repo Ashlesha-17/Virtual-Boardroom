@@ -11,37 +11,38 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [contact, setContact] = useState("");
   
-  const handleSignup = async (e) => {
-    e.preventDefault();
+const handleSignup = async (e) => {
+  e.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
+  if (password !== confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/auth/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, contact, email, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem("username", name);
+      localStorage.setItem("email", email);
+      localStorage.setItem("contact", contact);
+      alert(data.message);
+      navigate("/home");
+    } else {
+      alert(data.message);
     }
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+};
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, contact, email, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("username", name);
-        localStorage.setItem("email", email);
-        localStorage.setItem("contact", contact);
-        alert(data.message);  // Signup successful
-        navigate("/home");        // Redirect to login
-      } else {
-        alert(data.message);  // e.g., Email already in use
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
-    }
-  };
 
   return (
     <div className="auth-container">
