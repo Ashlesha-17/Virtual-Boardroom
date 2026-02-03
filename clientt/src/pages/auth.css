@@ -1,0 +1,114 @@
+/* Reset & base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Auth page wrapper */
+.auth-page {
+  min-height: 100vh; /* ensures full viewport height */
+  width: 100%;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  padding: 20px;
+}
+
+/* Card container */
+.auth-container {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(17, 17, 17, 0.85);
+  padding: 40px 30px;
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Heading */
+.auth-container h2 {
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  color: #ffa726;
+  letter-spacing: 0.5px;
+}
+
+/* Form layout */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Inputs inside auth */
+.auth-container input {
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: #222;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.auth-container input:focus {
+  background: #333;
+}
+
+/* Buttons inside auth */
+.auth-container button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #ff9800;
+  color: #111;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.auth-container button:hover {
+  background: #ffa726;
+  transform: translateY(-2px);
+}
+
+/* Paragraphs & links inside auth */
+.auth-container p {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.auth-container a {
+  color: #ff9800;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.auth-container a:hover {
+  text-decoration: underline;
+  color: #ffc107;
+}
+
+/* Responsive tweaks */
+@media (max-width: 450px) {
+  .auth-container {
+    padding: 30px 20px;
+  }
+
+  .auth-container h2 {
+    font-size: 1.5rem;
+  }
+}

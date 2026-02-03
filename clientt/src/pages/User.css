@@ -1,0 +1,143 @@
+/* Dashboard wrapper */
+.dashboard {
+  min-height: 100vh;
+  padding: 40px;
+  color: #222;
+  background: linear-gradient(135deg, #de99e6, #91e7ac); /* soft professional gradient */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Inter", sans-serif;
+}
+
+/* Cards inside dashboard */
+.dashboard .card {
+  background: #fcf8f8;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Headings inside cards */
+.dashboard .card h3 {
+  margin-bottom: 15px;
+  color: #2c0130;
+  font-weight: 600;
+}
+
+/* Chat box container */
+.chat-box {
+  max-height: 400px; /* fixed height for scroll */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding-right: 5px; /* avoid scrollbar overlay */
+  background: #dbc7dd; /* subtle background for chat */
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid #01430f;
+}
+
+/* Individual chat messages */
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  max-width: 75%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  word-wrap: break-word;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Own messages on right */
+.own-message {
+  align-self: flex-end;
+  background: #022d07;
+  color: white;
+  border-bottom-right-radius: 0;
+}
+
+/* Other messages on left */
+.other-message {
+  align-self: flex-start;
+  background: #023913;
+  color: #222;
+  border-bottom-left-radius: 0;
+}
+
+/* Sender name for others */
+.chat-sender-name {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 3px;
+  color: #faf5f5;
+}
+
+/* Timestamp */
+.chat-time {
+  font-size: 11px;
+  color: #e6e2e2;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* Chat input */
+.chat-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cfd8dc;
+  font-size: 14px;
+  outline: none;
+}
+
+.chat-input button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #1976d2;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.chat-input button:hover {
+  background: #1565c0;
+}
+
+/* Scrollbar style */
+.chat-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+/* Buttons inside dashboard */
+.dashboard button {
+  background: #1976d2;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.dashboard button:hover {
+  background: #136a47;
+}
