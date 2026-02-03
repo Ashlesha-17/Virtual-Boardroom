@@ -10,33 +10,44 @@ const Login = ({ setUser }) => {
   const navigate = useNavigate();
 
   // 🔹 Use environment variable for backend URL
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL?.trim();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
+    // 🔹 Debug: check backend URL
+    if (!BACKEND_URL) {
+      alert("Backend URL not set. Check REACT_APP_BACKEND_URL in Vercel.");
+      setLoading(false);
+      return;
+    }
+
     try {
+      // 🔹 Log request for debugging
+      console.log("Logging in with:", { email, password });
+
       const res = await axios.post(
-        `${BACKEND_URL}/api/auth/login`, // 🔹 use env URL
-        { email, password }
+        `${BACKEND_URL}/api/auth/login`,
+        { email, password },
+        { withCredentials: true } // 🔹 ensures cookies work if backend sets them
       );
 
       const loggedUser = res.data.user;
 
-      // ✅ store + update state
+      // ✅ Store user in localStorage & update state
       localStorage.setItem("user", JSON.stringify(loggedUser));
       setUser(loggedUser);
 
-      // ✅ redirect (LOWERCASE paths)
-      if (loggedUser.role.toLowerCase() === "admin") {
+      // ✅ Redirect based on role
+      if (loggedUser.role?.toLowerCase() === "admin") {
         navigate("/home");
       } else {
         navigate("/user");
       }
     } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Login failed");
+      console.error("Login error:", err.response || err);
+      alert(err.response?.data?.message || "Login failed. Check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -52,7 +63,7 @@ const Login = ({ setUser }) => {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
@@ -60,7 +71,7 @@ const Login = ({ setUser }) => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
 
