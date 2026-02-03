@@ -16,22 +16,23 @@ const app = express();
 
 const allowedOrigins = [
   "https://virtual-boardroom.vercel.app",
-  "https://virtual-boardroom-ox14.vercel.app", // Add your new Vercel frontend
-  "http://localhost:3000" // Optional: for local dev
+  "https://virtual-boardroom-ox14.vercel.app",
+  "https://virtual-boardroom-vfhc.vercel.app", // ✅ add the new frontend
+  "http://localhost:3000" // optional, for dev
 ];
 
 app.use(cors({
   origin: function(origin, callback){
-    // allow requests with no origin (like Postman)
-    if(!origin) return callback(null, true);
+    if(!origin) return callback(null, true); // allow Postman or server requests
     if(allowedOrigins.includes(origin)){
-      return callback(null, true);
+      callback(null, true);
     } else {
-      return callback(new Error("Not allowed by CORS"));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true
 }));
+
 
 // MIDDLEWARE
 app.use(cors({
