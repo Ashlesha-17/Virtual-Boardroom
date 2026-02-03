@@ -14,9 +14,36 @@ const chatRoutes = require("./routes/chats");
 
 const app = express();
 
+const allowedOrigins = [
+  "https://virtual-boardroom.vercel.app",
+  "https://virtual-boardroom-ox14.vercel.app", // Add your new Vercel frontend
+  "http://localhost:3000" // Optional: for local dev
+];
+
+app.use(cors({
+  origin: function(origin, callback){
+    // allow requests with no origin (like Postman)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.includes(origin)){
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
 // MIDDLEWARE
 app.use(cors({
-  origin: "https://virtual-boardroom.vercel.app",
+  origin: function(origin, callback){
+    // allow requests with no origin (like Postman)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.includes(origin)){
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
