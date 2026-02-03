@@ -17,8 +17,9 @@ const app = express();
 const allowedOrigins = [
   "https://virtual-boardroom.vercel.app",
   "https://virtual-boardroom-ox14.vercel.app",
-  "https://virtual-boardroom-vfhc.vercel.app", // ✅ add the new frontend
-  "http://localhost:3000" // optional, for dev
+  "https://virtual-boardroom-vfhc.vercel.app",
+  "https://virtual-boardroom-ox14-2qfqy85j7-ashlesha-mandhares-projects.vercel.app",
+  "http://localhost:3000"
 ];
 
 app.use(cors({
@@ -32,22 +33,6 @@ app.use(cors({
   },
   credentials: true
 }));
-
-
-// MIDDLEWARE
-app.use(cors({
-  origin: function(origin, callback){
-    // allow requests with no origin (like Postman)
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.includes(origin)){
-      return callback(null, true);
-    } else {
-      return callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
-app.use(express.json());
 
 // ROUTES
 app.use("/api/auth", authRoutes);
@@ -64,7 +49,12 @@ mongoose
 
 // CREATE SERVER & SOCKET.IO
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true
+  }
+});
 
 // Make io accessible in routes
 app.set("io", io);
