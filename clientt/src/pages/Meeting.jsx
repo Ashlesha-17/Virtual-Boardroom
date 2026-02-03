@@ -3,10 +3,10 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./Dashboard.css";
 
-// ⚡ Backend URL
-const BACKEND_URL = "http://localhost:5000";
+// 🔹 Use environment variable for backend
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-// ⚠️ Create socket ONCE
+// 🔹 Create socket connection to backend
 const socket = io(BACKEND_URL, { autoConnect: true });
 
 const Meeting = () => {
@@ -29,7 +29,7 @@ const Meeting = () => {
     fetchMeetings();
   }, []);
 
-  // Socket listeners (REAL-TIME updates only)
+  // Socket listeners
   useEffect(() => {
     const onMeetingStart = (meeting) => {
       setMeetings(prev => {
@@ -85,7 +85,6 @@ const Meeting = () => {
   const endMeeting = async (id) => {
     try {
       await axios.put(`${BACKEND_URL}/api/meeting/${id}/end`);
-      // UI will update via socket
     } catch (err) {
       console.error("End meeting error:", err);
       alert("Failed to end meeting");

@@ -9,13 +9,16 @@ const Login = ({ setUser }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // 🔹 Use environment variable for backend URL
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${BACKEND_URL}/api/auth/login`, // 🔹 use env URL
         { email, password }
       );
 
@@ -39,39 +42,39 @@ const Login = ({ setUser }) => {
     }
   };
 
-return (
-  <div className="auth-page">
-    <div className="auth-container">
-      <h2>Login</h2>
+  return (
+    <div className="auth-page">
+      <div className="auth-container">
+        <h2>Login</h2>
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
 
-      <p>
-        Don’t have an account? <Link to="/signup">Sign up</Link>
-      </p>
+        <p>
+          Don’t have an account? <Link to="/signup">Sign up</Link>
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default Login;

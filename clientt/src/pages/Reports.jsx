@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Reports.css";
 
-const BACKEND_URL = "http://localhost:5000";
+// 🔹 Use environment variable for backend
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Reports = () => {
   const [meetings, setMeetings] = useState([]);
@@ -32,7 +33,7 @@ const Reports = () => {
     fetchReports();
   }, []);
 
-  // Some computed stats
+  // Computed stats
   const liveMeetings = meetings.filter(m => m.isLive).length;
   const endedMeetings = meetings.length - liveMeetings;
   const completedTasks = tasks.filter(t => t.isCompleted).length;

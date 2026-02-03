@@ -3,8 +3,11 @@ import axios from "axios";
 import io from "socket.io-client";
 import "./User.css";
 
-const BACKEND_URL = "http://localhost:5000";
-const socket = io(BACKEND_URL);
+// 🔹 Use environment variable for backend
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+// 🔹 Initialize Socket.IO
+const socket = io(BACKEND_URL, { autoConnect: true });
 
 const UserDashboard = () => {
   const [meetings, setMeetings] = useState([]);
@@ -13,7 +16,6 @@ const UserDashboard = () => {
   const [newMessage, setNewMessage] = useState("");
 
   const messagesEndRef = useRef(null);
-
   const user = JSON.parse(localStorage.getItem("user"));
   const userEmail = user?.email;
 
@@ -71,9 +73,7 @@ const UserDashboard = () => {
       setTasks(prev => prev.map(t => (t._id === task._id ? task : t)));
     });
 
-    socket.on("chat:new", msg => {
-      setChatMessages(prev => [...prev, msg]);
-    });
+    socket.on("chat:new", msg => setChatMessages(prev => [...prev, msg]));
 
     return () => {
       socket.off("meeting:start");
@@ -94,9 +94,7 @@ const UserDashboard = () => {
         senderEmail: user.email,
       });
 
-      // Emit to socket immediately
-      socket.emit("chat:new", res.data);
-
+      // ❌ No need to emit manually — backend emits to all clients
       setNewMessage("");
     } catch (err) {
       console.error("Send message error:", err);
@@ -117,16 +115,7 @@ const UserDashboard = () => {
         <h3>Live Meetings</h3>
         {meetings.filter(m => m.isLive).length === 0 && <p>No live meetings</p>}
         {meetings.filter(m => m.isLive).map(m => (
-          <div
-            key={m._id}
-            style={{
-              background: "#4caf50",
-              padding: "10px",
-              marginBottom: "10px",
-              borderRadius: "6px",
-              color: "white"
-            }}
-          >
+          <div key={m._id} style={{ background: "#4caf50", padding: "10px", marginBottom: "10px", borderRadius: "6px", color: "white" }}>
             <strong>{m.title}</strong><br />
             <a href={m.meetLink} target="_blank" rel="noopener noreferrer" style={{ color: "#ffeb3b" }}>
               Join Meeting
@@ -136,38 +125,24 @@ const UserDashboard = () => {
       </div>
 
       {/* ================= TASKS ================= */}
-{/* ================= TASKS ================= */}
-<div className="card">
-  <h3>Your Tasks</h3>
-  {tasks.filter(task => task.assignedToEmail === userEmail).length === 0 && (
-    <p>No tasks assigned</p>
-  )}
-  {tasks
-    .filter(task => task.assignedToEmail === userEmail)
-    .map(task => (
-      <div
-        key={task._id}
-        style={{
-          border: "1px solid #ddd",
-          padding: "10px",
-          marginBottom: "10px",
-          borderRadius: "6px"
-        }}
-      >
-        <strong>{task.title}</strong>
-        <p>📅 Due: {new Date(task.dueDate).toLocaleDateString()}</p>
-        <p>⏰ Assigned: {new Date(task.assignedAt).toLocaleString()}</p>
-        {task.isCompleted ? (
-          <span style={{ color: "green", fontWeight: "bold" }}>
-            ✅ Completed {task.approvedByAdmin && "(Approved)"}
-          </span>
-        ) : (
-          <span style={{ color: "#ff9800", fontWeight: "bold" }}>⏳ Pending</span>
-        )}
+      <div className="card">
+        <h3>Your Tasks</h3>
+        {tasks.filter(task => task.assignedToEmail === userEmail).length === 0 && <p>No tasks assigned</p>}
+        {tasks.filter(task => task.assignedToEmail === userEmail).map(task => (
+          <div key={task._id} style={{ border: "1px solid #ddd", padding: "10px", marginBottom: "10px", borderRadius: "6px" }}>
+            <strong>{task.title}</strong>
+            <p>📅 Due: {new Date(task.dueDate).toLocaleDateString()}</p>
+            <p>⏰ Assigned: {new Date(task.assignedAt).toLocaleString()}</p>
+            {task.isCompleted ? (
+              <span style={{ color: "green", fontWeight: "bold" }}>
+                ✅ Completed {task.approvedByAdmin && "(Approved)"}
+              </span>
+            ) : (
+              <span style={{ color: "#ff9800", fontWeight: "bold" }}>⏳ Pending</span>
+            )}
+          </div>
+        ))}
       </div>
-    ))}
-</div>
-
 
       {/* ================= GLOBAL CHAT ================= */}
       <div className="card chat-card">
@@ -176,21 +151,10 @@ const UserDashboard = () => {
           {chatMessages.map(msg => {
             const isOwn = msg.senderEmail === user.email;
             return (
-              <div
-                key={msg._id}
-                className={`chat-message ${isOwn ? "own-message" : "other-message"}`}
-              >
-                {/* Only show sender name if not your own message */}
+              <div key={msg._id} className={`chat-message ${isOwn ? "own-message" : "other-message"}`}>
                 {!isOwn && <div className="chat-sender-name">{msg.senderName || "Unknown"}</div>}
-
                 <div className="chat-text">{msg.message}</div>
-
-                <div className="chat-time">
-                  {new Date(msg.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </div>
+                <div className="chat-time">{new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
               </div>
             );
           })}

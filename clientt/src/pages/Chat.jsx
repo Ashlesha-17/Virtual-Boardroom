@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import socket from "../socket";
+import io from "socket.io-client";
 import "./Chat.css";
 
-const BACKEND_URL = "http://localhost:5000";
+// 🔹 Use environment variable for backend
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-const Chat = ({ user : propUser }) => {
+// 🔹 Socket connection
+const socket = io(BACKEND_URL, { autoConnect: true });
+
+const Chat = ({ user: propUser }) => {
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
   const messagesEndRef = useRef(null);
+
   const user = propUser || JSON.parse(localStorage.getItem("user")) || { name: "Unknown", email: "" };
 
   // Fetch messages
@@ -16,7 +21,6 @@ const Chat = ({ user : propUser }) => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/chats`);
-        // sort by createdAt just in case
         const sorted = res.data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         setMessages(sorted);
       } catch (err) {
@@ -41,24 +45,22 @@ const Chat = ({ user : propUser }) => {
   }, [messages]);
 
   // Send message
-const sendMessage = async () => {
-  if (!newMsg.trim()) return;
+  const sendMessage = async () => {
+    if (!newMsg.trim()) return;
 
-  const msgData = {
-    message: newMsg.trim(),
-    senderName: user.name,
-    senderEmail: user.email
+    const msgData = {
+      message: newMsg.trim(),
+      senderName: user.name,
+      senderEmail: user.email
+    };
+
+    try {
+      await axios.post(`${BACKEND_URL}/api/chats`, msgData);
+      setNewMsg("");
+    } catch (err) {
+      console.error("Send message error:", err);
+    }
   };
-
-  try {
-    await axios.post(`${BACKEND_URL}/api/chats`, msgData); // backend emits via socket
-    setNewMsg(""); // clear input
-    // ❌ no need to add manually or emit via socket
-  } catch (err) {
-    console.error("Send message error:", err);
-  }
-};
-
 
   return (
     <div className="chat-container">
