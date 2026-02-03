@@ -88,7 +88,7 @@ const UserDashboard = () => {
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
     try {
-      const res = await axios.post(`${BACKEND_URL}/api/chats`, {
+        await axios.post(`${BACKEND_URL}/api/chats`, {
         message: newMessage,
         senderName: user.name,
         senderEmail: user.email,
