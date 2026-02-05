@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-// import "./auth.css";
+import "./auth.css";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -51,6 +51,7 @@ if (res.ok) {
 
 
   return (
+  <div className="auth-page">
     <div className="auth-container">
       <h2>Sign Up</h2>
 
@@ -62,6 +63,7 @@ if (res.ok) {
           onChange={(e) => setName(e.target.value)}
           required
         />
+
         <input
           type="text"
           placeholder="Contact No"
@@ -69,6 +71,7 @@ if (res.ok) {
           onChange={(e) => setContact(e.target.value)}
           required
         />
+
         <input
           type="email"
           placeholder="Email"
@@ -76,6 +79,7 @@ if (res.ok) {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <input
           type="password"
           placeholder="Password"
@@ -83,6 +87,7 @@ if (res.ok) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
         <input
           type="password"
           placeholder="Confirm Password"
@@ -98,7 +103,9 @@ if (res.ok) {
         Already have an account? <Link to="/">Login</Link>
       </p>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Signup;
